@@ -28,7 +28,8 @@ export const AuthProvider = ({ children }: any) => {
 			const storedToken = await SecureStore.getItemAsync(JWT_KEY);
 			if (storedToken) {
 				setToken(storedToken);
-				axios.defaults.headers.common.Authorization = `Bearer ${storedToken}`;
+				axios.defaults.headers.common["Authorization"] =
+					`Bearer ${storedToken}`;
 			}
 			setInitialized(true);
 		};
@@ -37,10 +38,13 @@ export const AuthProvider = ({ children }: any) => {
 
 	const handleLogin = async (email: string, password: string) => {
 		try {
+			console.log(API_URL);
 			const result = await axios.post(`${API_URL}/auth`, { email, password });
-			setToken(result.data.token);
-			axios.defaults.headers.common.Authorization = `Bearer ${result.data.token}`;
-			await SecureStore.setItemAsync(JWT_KEY, result.data.token);
+			console.log(result);
+			setToken(result?.data?.token);
+			axios.defaults.headers.common["Authorization"] =
+				`Bearer ${result?.data?.token}`;
+			await SecureStore.setItemAsync(JWT_KEY, result?.data?.token);
 			return result;
 		} catch (error: any) {
 			return { error: true, msg: error.response.data.msg };
@@ -59,7 +63,7 @@ export const AuthProvider = ({ children }: any) => {
 	const handleLogout = async () => {
 		setToken(null);
 		await SecureStore.deleteItemAsync(JWT_KEY);
-		axios.defaults.headers.common.Authorization = "";
+		axios.defaults.headers.common["Authorization"] = "";
 	};
 
 	const value = {

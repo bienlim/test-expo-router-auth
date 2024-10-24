@@ -1,4 +1,5 @@
 import Colors from "@/constants/Colors";
+import { AuthProvider } from "@/context/AuthContext";
 import {
 	DarkTheme,
 	DefaultTheme,
@@ -30,7 +31,7 @@ export default function RootLayout() {
 	}
 
 	return (
-		<>
+		<AuthProvider>
 			<StatusBar style="light" />
 			<Stack
 				screenOptions={{
@@ -62,6 +63,6 @@ export default function RootLayout() {
 					}}
 				/>
 			</Stack>
-		</>
+		</AuthProvider>
 	);
 }
