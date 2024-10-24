@@ -56,7 +56,7 @@ export default function RootLayout() {
 					}}
 				/>
 				<Stack.Screen
-					name="(authenticated)/(drawer)"
+					name="(authenticated)"
 					options={{
 						headerShown: false,
 					}}

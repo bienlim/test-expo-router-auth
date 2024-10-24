@@ -54,6 +54,16 @@ const Layout = () => {
 					),
 				}}
 			/>
+			<Tabs.Screen
+				name="list"
+				options={{
+					tabBarLabel: "List",
+					headerShown: false,
+					tabBarIcon: ({ size, color }) => (
+						<Ionicons name="list-outline" size={size} color={color} />
+					),
+				}}
+			/>
 		</Tabs>
 	);
 };
