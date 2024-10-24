@@ -31,7 +31,7 @@ export default function RootLayout() {
 
 	return (
 		<>
-			<StatusBar style="dark" />
+			<StatusBar style="light" />
 			<Stack
 				screenOptions={{
 					headerStyle: {
@@ -46,6 +46,19 @@ export default function RootLayout() {
 					options={{
 						title: "Create Account",
 						headerBackTitle: "Login",
+					}}
+				/>
+				<Stack.Screen
+					name="privacy"
+					options={{
+						title: "Privacy Policy",
+						presentation: "modal",
+					}}
+				/>
+				<Stack.Screen
+					name="(authenticated)/(tabs)"
+					options={{
+						headerShown: false,
 					}}
 				/>
 			</Stack>
