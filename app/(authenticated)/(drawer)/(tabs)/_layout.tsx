@@ -1,9 +1,12 @@
 import Colors from "@/constants/Colors";
+import { useAuth } from "@/context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 import { DrawerToggleButton } from "@react-navigation/drawer";
 import { Link, Tabs } from "expo-router";
-import { Alert } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
 const Layout = () => {
+	const { onLogout } = useAuth();
+
 	return (
 		<Tabs
 			screenOptions={{
@@ -12,9 +15,9 @@ const Layout = () => {
 				},
 				headerTintColor: "#fff",
 				headerRight: () => (
-					<Link href={"/"} replace asChild>
+					<TouchableOpacity onPress={onLogout}>
 						<Ionicons name="log-out-outline" size={24} color="#fff" />
-					</Link>
+					</TouchableOpacity>
 				),
 				headerLeft: () => <DrawerToggleButton tintColor="#fff" />,
 			}}

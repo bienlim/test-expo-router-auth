@@ -18,13 +18,11 @@ const Login = () => {
 	const [loading, setLoading] = useState(false);
 
 	const { onLogin } = useAuth();
-
 	const login = async () => {
 		setLoading(true);
 
-		const result = await onLogin!(email, password);
-		//console.log()
-		if (result && result.error) {
+		const result = await onLogin(email, password);
+		if (result?.error) {
 			alert(result.msg);
 		}
 		setLoading(false);

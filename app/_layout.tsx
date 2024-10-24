@@ -1,24 +1,29 @@
 import Colors from "@/constants/Colors";
-import { AuthProvider } from "@/context/AuthContext";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
 import {
 	DarkTheme,
 	DefaultTheme,
 	ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Slot, Stack, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
+import { ActivityIndicator } from "react-native";
 import "react-native-reanimated";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+function InitialLayout() {
 	const [loaded] = useFonts({
 		SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
 	});
+
+	const { token, initialized } = useAuth();
+	const router = useRouter();
+	const segments = useSegments();
 
 	useEffect(() => {
 		if (loaded) {
@@ -26,12 +31,26 @@ export default function RootLayout() {
 		}
 	}, [loaded]);
 
-	if (!loaded) {
-		return null;
-	}
+	console.log("initialized", initialized);
+	console.log("segments", segments);
+	console.log("token", token);
 
+	useEffect(() => {
+		if (!initialized) return;
+
+		const inAuthGroup = segments[0] === "(authenticated)";
+		if (token && !inAuthGroup) {
+			router.replace("/(authenticated)/(drawer)/(tabs)/home");
+		} else if (!token && inAuthGroup) {
+			router.replace("/");
+		}
+	}, [token, initialized]);
+
+	if (!loaded || !initialized) {
+		return <Slot />;
+	}
 	return (
-		<AuthProvider>
+		<>
 			<StatusBar style="light" />
 			<Stack
 				screenOptions={{
@@ -63,6 +82,14 @@ export default function RootLayout() {
 					}}
 				/>
 			</Stack>
+		</>
+	);
+}
+
+export default function RootLayout() {
+	return (
+		<AuthProvider>
+			<InitialLayout />
 		</AuthProvider>
 	);
 }

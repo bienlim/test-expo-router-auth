@@ -26,12 +26,13 @@ export const AuthProvider = ({ children }: any) => {
 	useEffect(() => {
 		const loadToken = async () => {
 			const storedToken = await SecureStore.getItemAsync(JWT_KEY);
+			console.log("Stored token ", storedToken);
 			if (storedToken) {
 				setToken(storedToken);
-				axios.defaults.headers.common["Authorization"] =
-					`Bearer ${storedToken}`;
+				axios.defaults.headers.common.Authorization = `Bearer ${storedToken}`;
 			}
 			setInitialized(true);
+			console.log("initialized ", initialized);
 		};
 		loadToken();
 	}, []);
@@ -40,10 +41,10 @@ export const AuthProvider = ({ children }: any) => {
 		try {
 			console.log(API_URL);
 			const result = await axios.post(`${API_URL}/auth`, { email, password });
-			console.log(result);
+			console.log("Result token ", result?.data?.token);
 			setToken(result?.data?.token);
-			axios.defaults.headers.common["Authorization"] =
-				`Bearer ${result?.data?.token}`;
+			console.log("State token ", token);
+			axios.defaults.headers.common.Authorization = `Bearer ${result?.data?.token}`;
 			await SecureStore.setItemAsync(JWT_KEY, result?.data?.token);
 			return result;
 		} catch (error: any) {
@@ -63,7 +64,7 @@ export const AuthProvider = ({ children }: any) => {
 	const handleLogout = async () => {
 		setToken(null);
 		await SecureStore.deleteItemAsync(JWT_KEY);
-		axios.defaults.headers.common["Authorization"] = "";
+		axios.defaults.headers.common.Authorization = "";
 	};
 
 	const value = {
